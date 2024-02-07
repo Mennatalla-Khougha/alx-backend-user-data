@@ -41,15 +41,6 @@ def filter_datum(
     return:
     str: The log message obfuscated
     """
-
-    # regex = '|'.join(fields)
-    # print(f'({regex})=[^{separator}]*')
-    # return re.sub(
-    #     f'{regex}=.*?{separator}]',
-    #     f'\\1={redaction}',
-    #     message)
-
-
     for field in fields:
         pattern = r'{}=[^{}]+'.format(field, separator)
         message = re.sub(pattern, '{}={}'.format(field, redaction), message)
