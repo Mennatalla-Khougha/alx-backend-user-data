@@ -67,6 +67,13 @@ PII_FIELDS = ("email", "ssn", "password", "phone", "name")
 
 
 def get_logger() -> logging.Logger:
+    """The logger should be named "user_data" and only log up to logging.INFO
+    level. It should not propagate messages to other loggers.
+    It should have a StreamHandler with RedactingFormatter as formatter
+
+    Returns:
+        logging.Logger:
+    """
     logger = logging.getLogger("user_data")
     logger.setLevel(logging.INFO)
     logger.propagate = False
