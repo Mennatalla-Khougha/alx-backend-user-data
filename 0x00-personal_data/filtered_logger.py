@@ -14,10 +14,20 @@ class RedactingFormatter(logging.Formatter):
     SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
+        """_summary_
+
+        Args:
+            fields (List[str]): _description_
+        """
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord):
+        """_summary_
+
+        Args:
+            record (logging.LogRecord): _description_
+        """
         NotImplementedError
 
 
@@ -47,6 +57,3 @@ def filter_datum(
             '{}={}'.format(field, redaction),
             message)
     return message
-    # return re.sub(r'({})=[^{}]+'.format(
-    #     '|'.join(fields), separator
-    #     ), r'\1={}'.format(redaction), message)
