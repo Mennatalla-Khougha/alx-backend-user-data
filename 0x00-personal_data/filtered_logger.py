@@ -6,6 +6,7 @@ import logging
 import os
 from os import environ
 import mysql.connector
+from mysql.connector import (connection)
 
 
 def filter_datum(
@@ -93,21 +94,32 @@ def get_logger() -> logging.Logger:
 
 
 
-def get_db() -> mysql.connector.connection.MySQLConnection:
-    """Returns a connector to the database"""
-    username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
-    password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
-    host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
-    database = os.getenv("PERSONAL_DATA_DB_NAME")
-    
-    print(f"Username: {username}")
-    print(f"Password: {'*' * len(password)}")  # Hide the actual password
-    print(f"Host: {host}")
-    print(f"Database: {database}")
-    # Connect to the database
-    
-    cnx = mysql.connector.connection.MySQLConnection(user=username,
-                                                     password=password,
-                                                     host=host,
-                                                     database=db_name)
-    return cnx
+def get_db() -> connection.MySQLConnection:
+    """returns a connector to the database"""
+    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
+    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
+    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
+    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
+    return connection.MySQLConnection(
+            host=host,
+            username=username,
+            password=password,
+            database=db_name
+            )
+
+
+def main():
+    """main function"""
+    db = get_db()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users;")
+    logger = get_logger()
+    for row in cursor:
+        line = ''
+        for key, value in row.items():
+            line += f'{key}={value}; '
+        logger.info(line)
+
+
+if __name__ == "__main__":
+    main()
