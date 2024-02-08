@@ -92,29 +92,22 @@ def get_logger() -> logging.Logger:
     return logger
 
 
+
 def get_db() -> mysql.connector.connection.MySQLConnection:
     """Returns a connector to the database"""
-    # username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
-    # password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
-    # host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
-    # name = environ.get("PERSONAL_DATA_DB_NAME")
-
-    # connection = mysql.connector.connection.MySQLConnection(
-    #     user=username, password=password, host=host, database=name)
-
-    # return connection
     username = os.getenv("PERSONAL_DATA_DB_USERNAME", "root")
     password = os.getenv("PERSONAL_DATA_DB_PASSWORD", "")
     host = os.getenv("PERSONAL_DATA_DB_HOST", "localhost")
     database = os.getenv("PERSONAL_DATA_DB_NAME")
-
-    try:
-        connection = mysql.connector.connect(
-            user=username,
-            password=password,
-            host=host,
-            database=database
-            )
-        return connection
-    except mysql.connector.Error as err:
-        return None
+    
+    print(f"Username: {username}")
+    print(f"Password: {'*' * len(password)}")  # Hide the actual password
+    print(f"Host: {host}")
+    print(f"Database: {database}")
+    # Connect to the database
+    
+    cnx = mysql.connector.connection.MySQLConnection(user=username,
+                                                     password=password,
+                                                     host=host,
+                                                     database=db_name)
+    return cnx

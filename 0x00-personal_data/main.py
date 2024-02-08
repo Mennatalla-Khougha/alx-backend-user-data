@@ -2,8 +2,8 @@
 """
 Main file
 """
-
-get_db = __import__('filtered_logger').get_db
+from filtered_logger import get_db
+# get_db = __import__('filtered_logger').get_db
 
 db = get_db()
 cursor = db.cursor()
