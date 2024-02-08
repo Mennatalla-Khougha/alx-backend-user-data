@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
-import bcrypt
 """Hashing password"""
+import bcrypt
 
 
 def hash_password(password: str) -> bytes:
