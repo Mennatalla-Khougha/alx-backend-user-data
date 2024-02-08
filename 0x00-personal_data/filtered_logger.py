@@ -94,32 +94,46 @@ def get_logger() -> logging.Logger:
 
 
 
-def get_db() -> connection.MySQLConnection:
-    """returns a connector to the database"""
-    db_name = os.getenv('PERSONAL_DATA_DB_NAME')
-    username = os.getenv('PERSONAL_DATA_DB_USERNAME', 'root')
-    password = os.getenv('PERSONAL_DATA_DB_PASSWORD', '')
-    host = os.getenv('PERSONAL_DATA_DB_HOST', 'localhost')
-    return connection.MySQLConnection(
-            host=host,
-            username=username,
-            password=password,
-            database=db_name
-            )
+def get_db() -> mysql.connector.connection.MySQLConnection:
+    """
+    Returns a MySQLConnection object for accessing Personal Data database
+
+    Returns:
+        A MySQLConnection object using connection details from
+        environment variables
+    """
+    username = environ.get("PERSONAL_DATA_DB_USERNAME", "root")
+    password = environ.get("PERSONAL_DATA_DB_PASSWORD", "")
+    host = environ.get("PERSONAL_DATA_DB_HOST", "localhost")
+    db_name = environ.get("PERSONAL_DATA_DB_NAME")
+
+    cnx = mysql.connector.connection.MySQLConnection(user=username,
+                                                     password=password,
+                                                     host=host,
+                                                     database=db_name)
+    return cnx
 
 
 def main():
-    """main function"""
+    """
+    Main function to retrieve user data from database and log to console
+    """
     db = get_db()
-    cursor = db.cursor(dictionary=True)
+    cursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
+    field_names = [i[0] for i in cursor.description]
+
     logger = get_logger()
+
     for row in cursor:
-        line = ''
-        for key, value in row.items():
-            line += f'{key}={value}; '
-        logger.info(line)
+        str_row = ''.join(f'{f}={str(r)}; ' for r, f in zip(row, field_names))
+        logger.info(str_row.strip())
+
+    cursor.close()
+    db.close()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()
+
+
