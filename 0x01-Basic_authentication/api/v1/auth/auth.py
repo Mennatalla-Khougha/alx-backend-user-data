@@ -25,7 +25,8 @@ class Auth:
             if path.rstrip('/') == i.rstrip('/'):
                 return False
             elif i[-1] == "*":
-                return False
+                if path.startswith(i[:-1]):
+                    return False
         return True
 
     def authorization_header(self, request=None) -> str:
