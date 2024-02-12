@@ -42,7 +42,3 @@ class Auth:
     def current_user(self, request=None) -> TypeVar('User'):
         """Public method"""
         return None
-
-
-class BasicAuth(Auth):
-    """Class BasicAuth that inherits from Auth"""
