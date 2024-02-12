@@ -8,11 +8,11 @@ class Auth:
     """class to manage the API authentication"""
 
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """Check if the specified path require authentication 
+        """Check if the specified path require authentication
 
         Args:
             path (str): Path to be checked
-            excluded_paths (List[str]): paths excluded from authentication 
+            excluded_paths (List[str]): paths excluded from authentication
 
         Returns:
             bool: True, False
@@ -40,6 +40,5 @@ class Auth:
         return request.headers.get('Authorization')
 
     def current_user(self, request=None) -> TypeVar('User'):
-        """Public method
-        """        
+        """Public method"""
         return None
