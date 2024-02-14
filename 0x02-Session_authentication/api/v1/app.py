@@ -49,10 +49,18 @@ def before_request():
     """Filter each request"""
     if auth is None:
         return
-    paths = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
+    paths = [
+        '/api/v1/status/',
+        '/api/v1/unauthorized/',
+        '/api/v1/forbidden/',
+        '/api/v1/auth_session/login/'
+        ]
     response = auth.require_auth(request.path, paths)
     if not response:
         return
+    cookie = auth.session_cookie(request)
+    if auth.authorization_header(request) is None and cookie is None:
+        return unauthorized(401)
     if auth.authorization_header(request) is None:
         return unauthorized(401)
     request.current_user = auth.current_user(request)
