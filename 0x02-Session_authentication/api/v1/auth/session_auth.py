@@ -35,7 +35,7 @@ class SessionAuth(Auth):
         """
         if session_id is None or not isinstance(session_id, str):
             return None
-        return str(self.user_id_by_session_id.get(session_id))
+        return self.user_id_by_session_id.get(session_id)
 
     def current_user(self, request=None):
         """Returns a User instance based on a cookie value
@@ -51,8 +51,11 @@ class SessionAuth(Auth):
         """Deletes the user session / logout"""
         if not request:
             return False
-        session_id = self.session_cookie(request)
-        if not session_id or not self.user_id_for_session_id(session_id):
+        session_cookie = self.session_cookie(request)
+        if session_cookie is None:
             return False
-        del self.user_id_by_session_id[session_id]
+        user_id = self.user_id_for_session_id(session_cookie)
+        if user_id is None:
+            return False
+        del self.user_id_by_session_id[session_cookie]
         return True
