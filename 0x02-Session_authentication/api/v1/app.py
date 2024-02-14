@@ -61,8 +61,6 @@ def before_request():
     cookie = auth.session_cookie(request)
     if auth.authorization_header(request) is None and cookie is None:
         return unauthorized(401)
-    # if auth.authorization_header(request) is None:
-    #     return unauthorized(401)
     request.current_user = auth.current_user(request)
     if request.current_user is None:
         return forbidden(403)
