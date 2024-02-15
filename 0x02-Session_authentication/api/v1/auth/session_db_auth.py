@@ -38,4 +38,5 @@ class SessionDBAuth(SessionExpAuth):
         if not user_session:
             return False
         del user_session[0]
+        UserSession.save_to_file()
         return True
