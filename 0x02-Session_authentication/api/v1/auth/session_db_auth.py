@@ -11,9 +11,7 @@ class SessionDBAuth(SessionExpAuth):
         session_id = super().create_session(user_id)
         if not session_id:
             return None
-        arg = {
-            "user_id": user_id, "session_id": session_id
-        }
+        arg = {"user_id": user_id, "session_id": session_id}
         user_session = UserSession(**arg)
         user_session.save()
         return session_id
@@ -27,13 +25,11 @@ class SessionDBAuth(SessionExpAuth):
 
     def destroy_session(self, request=None):
         """Overload destroy session"""
-        if request is None:
-            return False
         session_id = self.session_cookie(request)
         if not session_id:
             return False
         user_session = UserSession.search({"session_id": session_id})
-        if user_session:
-            user_session[0].remove()
-            return True
-        return False
+        if not user_session:
+            return False
+        user_session[0].remove()
+        return True
