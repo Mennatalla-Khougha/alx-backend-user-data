@@ -71,9 +71,9 @@ class DB:
             raise InvalidRequestError
         try:
             user = self._session.query(User).filter_by(**kwargs).one()
-            return user
         except NoResultFound:
             raise NoResultFound
+        return user
         # except InvalidRequestError:
 
     def update_user(self, user_id: int, **kwargs) -> None:
