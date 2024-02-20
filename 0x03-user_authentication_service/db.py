@@ -30,7 +30,6 @@ class DB:
             self.__session = DBSession()
         return self.__session
 
-    @staticmethod
     def add_user(self, email: str, hashed_password: str) -> User:
         """ The method should save the user to the database
 
@@ -43,5 +42,5 @@ class DB:
         """
         user = User(email=email, hashed_password=hashed_password)
         self._session.add(user)
-        self._session.commit(user)
+        self._session.commit()
         return user
