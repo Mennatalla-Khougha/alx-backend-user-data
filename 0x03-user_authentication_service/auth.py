@@ -7,22 +7,18 @@ from uuid import uuid4
 
 
 def _hash_password(password: str) -> bytes:
-    """Hash a password with bcrypt.
-    Args:
-        password (str): The password to be hashed.
-    Returns:
-        bytes: The salted hash of the password.
     """
-    salt = bcrypt.gensalt()
-    hash_password = bcrypt.hashpw(password.encode('utf-8'), salt)
-    return hash_password
+    Hashes a password string and returns it in bytes form
+    Args:
+        password (str): password in string format
+    """
+    passwd = password.encode('utf-8')
+    return bcrypt.hashpw(passwd, bcrypt.gensalt())
 
 
 def _generate_uuid() -> str:
-    """Generate a new UUID and return it as a string.
-
-    Returns:
-        str: A new UUID as a string.
+    """
+    Generate a uuid and return its string representation
     """
     return str(uuid4())
 
@@ -118,21 +114,21 @@ class Auth:
         return None
 
     def get_reset_password_token(self, email: str) -> str:
-        """
-        Generates a reset_token uuid for a user identified by the given email
+        """Generate a UUID and update the user’s reset_token database field
+
         Args:
-            email (str): user's email address
-        Return:
-            newly generated reset_token for the relevant user
+            email (str): User email
+
+        Returns:
+            str: The reset token
         """
         try:
             user = self._db.find_user_by(email=email)
+            token = _generate_uuid()
+            self._db.update_user(user.id, reset_token=token)
+            return token
         except NoResultFound:
             raise ValueError
-
-        reset_token = _generate_uuid()
-        self._db.update_user(user.id, reset_token=reset_token)
-        return reset_token
 
     def update_password(self, reset_token: str, password: str) -> None:
         """Hash the password and update the user with the new password
