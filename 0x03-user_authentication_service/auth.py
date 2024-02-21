@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+"""auth Module"""
 import bcrypt
 from db import DB
 from user import User
@@ -7,18 +8,22 @@ from uuid import uuid4
 
 
 def _hash_password(password: str) -> bytes:
-    """
-    Hashes a password string and returns it in bytes form
+    """Hash a password with bcrypt.
     Args:
-        password (str): password in string format
+        password (str): The password to be hashed.
+    Returns:
+        bytes: The salted hash of the password.
     """
-    passwd = password.encode('utf-8')
-    return bcrypt.hashpw(passwd, bcrypt.gensalt())
+    salt = bcrypt.gensalt()
+    hash_password = bcrypt.hashpw(password.encode('utf-8'), salt)
+    return hash_password
 
 
 def _generate_uuid() -> str:
-    """
-    Generate a uuid and return its string representation
+    """Generate a new UUID and return it as a string.
+
+    Returns:
+        str: A new UUID as a string.
     """
     return str(uuid4())
 
