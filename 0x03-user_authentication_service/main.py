@@ -13,7 +13,13 @@ BASE_URL = "http://127.0.0.1:5000"
 
 def register_user(email: str, password: str) -> None:
     """Registers a new user with the specified email and password."""
-    pass
+    res = requests.post(BASE_URL + "/users",
+                        data={'email': email, "password": password})
+    if res.status_code == 200:
+        assert(res.json() == {"email": email, "message": "user created"})
+    else:
+        assert(res.status_code == 400)
+        assert(res.json() == {"message": "email already registered"})
 
 
 def log_in_wrong_password(email: str, password: str) -> None:
