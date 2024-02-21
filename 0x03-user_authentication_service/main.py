@@ -24,12 +24,15 @@ def register_user(email: str, password: str) -> None:
 
 def log_in_wrong_password(email: str, password: str) -> None:
     """Attempts to log in with the specified email and incorrect password."""
-    pass
+    res = requests.post(BASE_URL + "/sessions",
+                        data={'email': email, "password": password})
+    assert(res.status_code == 401)
 
 
 def profile_unlogged() -> None:
     """Accesses the profile endpoint without logging in, expecting a 403."""
-    pass
+    res = requests.get(BASE_URL + '/profile')
+    assert(res.status_code == 403)
 
 
 def log_in(email: str, password: str) -> str:
